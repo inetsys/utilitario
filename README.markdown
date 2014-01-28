@@ -41,66 +41,3956 @@ functions included
 The next table show what happens in every input you can throw at those functions.
 
 ```
-┌─────────────────────────────────────────┬────────┬────────┬─────────┬─────────┬───────┬────────┬───────┬───────┬───────┬──────────┬───────┬───────┬────────┬────────┬───────┬───────┬───────┐
-│ type                                    │ date   │ number │ decimal │ integer │ nan   │ null   │ null  │ not   │ empty │ infinite │ not   │ regex │ object │ string │ array │ date  │ json  │
-│                                         │ Strict │ Strict │         │         │       │ Strict │       │ Null  │       │          │ Empty │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ undefined                               │ false  │ false  │ false   │ false   │ false │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
-│ [object Undefined]                      │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ null                                    │ false  │ false  │ false   │ false   │ false │ true   │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
-│ [object Null]                           │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ 0                                       │ false  │ true   │ true    │ true    │ false │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
-│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ 100                                     │ false  │ true   │ true    │ true    │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ false  │ false  │ false │ true  │ false │
-│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ '100'                                   │ false  │ false  │ true    │ true    │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ false  │ true   │ false │ true  │ true  │
-│ [object String]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ ''                                      │ false  │ false  │ false   │ false   │ false │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ true   │ false │ false │ false │
-│ [object String]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ {}                                      │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ true  │ false    │ false │ false │ true   │ false  │ false │ false │ false │
-│ [object Object]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ { xx: true }                            │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ true   │ false  │ false │ false │ false │
-│ [object Object]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ []                                      │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ true  │ false    │ false │ false │ true   │ false  │ true  │ false │ false │
-│ [object Array]                          │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ [ 10 ]                                  │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ true   │ false  │ true  │ false │ false │
-│ [object Array]                          │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ ////                                    │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ true  │ true   │ false  │ false │ false │ false │
-│ [object RegExp]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ Wed Jan 01 2014 01:00:00 GMT+0100 (CET) │ true   │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ true   │ false  │ false │ true  │ false │
-│ [object Date]                           │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ NaN                                     │ false  │ true   │ true    │ true    │ true  │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
-│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ Infinity                                │ false  │ true   │ true    │ true    │ false │ false  │ false │ true  │ false │ true     │ true  │ false │ false  │ false  │ false │ false │ false │
-│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ -Infinity                               │ false  │ true   │ true    │ true    │ false │ false  │ false │ true  │ false │ true     │ true  │ false │ false  │ false  │ false │ false │ false │
-│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
-│ '{"json_test":true}'                    │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ false  │ true   │ false │ false │ true  │
-│ [object String]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
-└─────────────────────────────────────────┴────────┴────────┴─────────┴─────────┴───────┴────────┴───────┴───────┴───────┴──────────┴───────┴───────┴────────┴────────┴───────┴───────┴───────┘
+
+┌────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│type                ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│                    ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│undefined           ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Undefined]  ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│null                ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Null]       ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│0                   ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Number]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│100                 ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Number]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│'100'               ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object String]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│''                  ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object String]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│{}                  ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Object]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│{ xx: true }        ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Object]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[]                  ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Array]      ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[ 10 ]              ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Array]      ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│////                ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object RegExp]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│2014 01 01 ...┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Date]       ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│NaN                 ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Number]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│Infinity            ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Number]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│-Infinity           ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object Number]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+├────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│'{"json_test":true}'┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+│[object String]     ┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+└────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
+│date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
+│false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
+│      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
+┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
+
 ```
 If you like that table, you can do it yourself using: [cli-table](https://github.com/LearnBoost/cli-table)
 
 
 
+## cast
+
+```
+┌──────────────────┬───┬─────┬──────────┬──────────┬──────┬──────────────────────┬──────────────┐
+│type              │int│float│string    │date      │regex │object                │array         │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│100               │100│100  │'100'     │1970 01 01│null  │null                  │null          │
+│[object Number]   │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│'100'             │100│100  │'100'     │100 01 01 │/100/ │null                  │null          │
+│[object String]   │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│null              │0  │0    │null      │null      │null  │null                  │null          │
+│[object Null]     │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│undefined         │0  │0    │null      │null      │null  │null                  │null          │
+│[object Undefined]│   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│{ x: true }       │0  │0    │null      │null      │null  │{ x: true }           │null          │
+│[object Object]   │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│[]                │0  │0    │''        │null      │null  │{}                    │[]            │
+│[object Array]    │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│null              │0  │0    │null      │null      │null  │null                  │null          │
+│[object Null]     │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│NaN               │0  │0    │null      │null      │null  │null                  │null          │
+│[object Number]   │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│'ok!!'            │0  │0    │'ok!!'    │null      │/ok!!/│null                  │null          │
+│[object String]   │   │     │          │          │      │                      │              │
+├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
+│[ 500, , 100 ]    │0  │0    │'500,,100'│null      │null  │{ '0': 500, '2': 100 }│[ 500, , 100 ]│
+│[object Array]    │   │     │          │          │      │                      │              │
+└──────────────────┴───┴─────┴──────────┴──────────┴──────┴──────────────────────┴──────────────┘
+```
+
+
+
 ## Dependencies
 
-None, very rare... I know.
+[node-querystring](https://github.com/visionmedia/node-querystring)
 
 
 *Developement*
