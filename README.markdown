@@ -1,3 +1,5 @@
+
+
 # utilitario [![Build Status](https://secure.travis-ci.org/llafuente/utilitario.png?branch=master)](http://travis-ci.org/llafuente/utilitario)
 
 ## note
@@ -14,6 +16,85 @@ That's the main objective of this module:
 * Validate any input, respond false is not an acceptable input.
 * cast anything into something.
 * Will throw if you configure it to do so. Like allow_nan = false, very useful for development.
+
+## is
+
+functions included
+* dateStrict(val)
+* numberStrict(val)
+* decimal(val)
+* integer(val)
+* nan(val)
+* nullStrict(val)
+* null(val)
+* notNull(val)
+* empty(val)
+* infinite(val)
+* notEmpty(val)
+* regex(val)
+* object(val)
+* string(val)
+* array(val)
+* date(val)
+* json(val)
+
+The next table show what happens in every input you can throw at those functions.
+
+```
+┌─────────────────────────────────────────┬────────┬────────┬─────────┬─────────┬───────┬────────┬───────┬───────┬───────┬──────────┬───────┬───────┬────────┬────────┬───────┬───────┬───────┐
+│ type                                    │ date   │ number │ decimal │ integer │ nan   │ null   │ null  │ not   │ empty │ infinite │ not   │ regex │ object │ string │ array │ date  │ json  │
+│                                         │ Strict │ Strict │         │         │       │ Strict │       │ Null  │       │          │ Empty │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ undefined                               │ false  │ false  │ false   │ false   │ false │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
+│ [object Undefined]                      │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ null                                    │ false  │ false  │ false   │ false   │ false │ true   │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
+│ [object Null]                           │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ 0                                       │ false  │ true   │ true    │ true    │ false │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
+│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ 100                                     │ false  │ true   │ true    │ true    │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ false  │ false  │ false │ true  │ false │
+│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ '100'                                   │ false  │ false  │ true    │ true    │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ false  │ true   │ false │ true  │ true  │
+│ [object String]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ ''                                      │ false  │ false  │ false   │ false   │ false │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ true   │ false │ false │ false │
+│ [object String]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ {}                                      │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ true  │ false    │ false │ false │ true   │ false  │ false │ false │ false │
+│ [object Object]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ { xx: true }                            │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ true   │ false  │ false │ false │ false │
+│ [object Object]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ []                                      │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ true  │ false    │ false │ false │ true   │ false  │ true  │ false │ false │
+│ [object Array]                          │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ [ 10 ]                                  │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ true   │ false  │ true  │ false │ false │
+│ [object Array]                          │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ ////                                    │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ true  │ true   │ false  │ false │ false │ false │
+│ [object RegExp]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ Wed Jan 01 2014 01:00:00 GMT+0100 (CET) │ true   │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ true   │ false  │ false │ true  │ false │
+│ [object Date]                           │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ NaN                                     │ false  │ true   │ true    │ true    │ true  │ false  │ true  │ false │ true  │ false    │ false │ false │ false  │ false  │ false │ false │ false │
+│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ Infinity                                │ false  │ true   │ true    │ true    │ false │ false  │ false │ true  │ false │ true     │ true  │ false │ false  │ false  │ false │ false │ false │
+│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ -Infinity                               │ false  │ true   │ true    │ true    │ false │ false  │ false │ true  │ false │ true     │ true  │ false │ false  │ false  │ false │ false │ false │
+│ [object Number]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+├─────────────────────────────────────────┼────────┼────────┼─────────┼─────────┼───────┼────────┼───────┼───────┼───────┼──────────┼───────┼───────┼────────┼────────┼───────┼───────┼───────┤
+│ '{"json_test":true}'                    │ false  │ false  │ false   │ false   │ false │ false  │ false │ true  │ false │ false    │ true  │ false │ false  │ true   │ false │ false │ true  │
+│ [object String]                         │        │        │         │         │       │        │       │       │       │          │       │       │        │        │       │       │       │
+└─────────────────────────────────────────┴────────┴────────┴─────────┴─────────┴───────┴────────┴───────┴───────┴───────┴──────────┴───────┴───────┴────────┴────────┴───────┴───────┴───────┘
+```
+If you like that table, you can do it yourself using: [cli-table](https://github.com/LearnBoost/cli-table)
 
 
 
