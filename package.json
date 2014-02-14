@@ -27,7 +27,8 @@
     "node": ">=0.6"
   },
   "dependencies": {
-    "qs" : "*"
+    "qs" : "*",
+    "object-enhancements": "*"
   },
   "devDependencies": {
     "tap": "~0.4.4",
