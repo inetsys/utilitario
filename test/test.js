@@ -376,158 +376,132 @@ process.exit();
 
 
         t.end();
-    })
+    });
 
 
+    test("rValidate && validate", function(t) {
+
+        var errors = [],
+            ret = utilitario.schema("100", {
+                constraints: {
+                    "integer": ["integer constraint fail"],
+                },
+                cast: "integer"
+            }, errors);
 
 
+        t.deepEqual(ret, 100, "is 100 number");
+        t.deepEqual(errors, [], "no errors");
 
-/*
-.forEach(function(test) {
-    var i;
+        t.end();
+    });
 
-    console.log("test ", test);
-    for (i in module.exports.is) {
-        console.log("is - ", i , module.exports.is[i](test));
-    }
+    test("rValidate && validate", function(t) {
 
-    for (i in module.exports.constraints) {
-        switch(i) {
-        case "length":
-            console.log("constraints - ", i , module.exports.constraints[i](test, 10, 100));
-            break;
-        case "min":
-        case "max":
-            console.log("constraints - ", i , module.exports.constraints[i](test, 10));
-            break;
-        case "regex":
-        case "notRegex":
-            console.log("constraints - ", i , module.exports.constraints[i](test, new RegExp("//")));
-            break;
-        case "dateAfter":
-        case "dateBefore":
-            console.log("constraints - ", i , module.exports.constraints[i](test, new Date()));
-            break;
-        default:
-            console.log("constraints - ", i , module.exports.constraints[i](test));
-        }
-    }
-
-    for (i in module.exports.cast) {
-        console.log("cast - ", i , module.exports.cast[i](test));
-    }
-});
-
-process.exit();
-/*
-[{
-  value: "100",
-  cast: {
-    string: "100",
-    int: 100
-    json: {} //stringify
-    object //parse json if needed, array to object
-  },
-  is: {
-    string: true,
-    email: false,
-    length: [0, 5, true],
-    min: [50, true],
-    max: [150, true],
-    int: true,
-    float: true,
-    decimal: true,
-    object: false,
-    array: false,
-    date: false,
-    dateAfter
-    dateBefore
-    dateFuture: false,
-    datePast: false,
-    timestamp: false,
-    alpha: false,
-    numeric: true,
-    alphanum: true,
-    lowercased: true,
-    uppercased: true,
-    null: false,
-    undefined: false,
-    notNull: true,
-    empty: //php empty
-    equal: ["xxx", false],
-    in: [["x", "y"], false]
-    notIn: [["x", "y"], false]
-    contains: ["0", true]
-    notContains: ["0", false]
-    regex
-    notRegex
-    UUID
-    UUIDv3
-    UUIDv4
-    UUIDv5
-    divisible
-    mailto
-    html
-    json
-  }
-},]
-
-invalid_emails = [
-    "invalidemail@",
-    "invalid.com",
-    "@invalid.com"
-];
-
-valid_emails = [
-    "foo@bar.com",
-    "x@x.x",
-    "foo@bar.com.au",
-    "foo+bar@bar.com"
-];
+        var errors = [],
+            ret = utilitario.schema("x100", {
+                constraints: {
+                    "integer": ["integer constraint fail"],
+                },
+                cast: "integer"
+            }, errors);
 
 
-invalid_urls = [
-    "xyz://foobar.com", //Only http, https and ftp are valid
-    "invalid/",
-    "invalid.x",
-    "invalid.",
-    ".com",
-    "http://com/",
-    "http://300.0.0.1/",
-    "mailto:foo@bar.com"
-];
+        t.deepEqual(ret, 0, "is 100 number");
+        t.deepEqual(errors, ["integer constraint fail"], "errors");
 
-valid_urls = [
-    "foobar.com",
-    "www.foobar.com",
-    "foobar.com/",
-    "valid.au",
-    "http://www.foobar.com/",
-    "https://www.foobar.com/",
-    "ftp://www.foobar.com/",
-    "http://www.foobar.com/~foobar",
-    "http://user:pass@www.foobar.com/",
-    "http://127.0.0.1/",
-    "http://10.0.0.0/",
-    "http://189.123.14.13/",
-    "http://duckduckgo.com/?q=%2F",
-    "http://foobar.com/t$-_.+!*\"(),",
-    "http://localhost:3000/"
-];
+        t.end();
+    });
 
-invalid_ips = [
-    "abc",
-    "256.0.0.0",
-    "0.0.0.256"
-];
+    test("rValidate && validate", function(t) {
 
-valid_ips = [
-            "127.0.0.1",
-            "0.0.0.0",
-            "255.255.255.255",
-            "1.2.3.4"
-];
-*/
+        var errors = [],
+            ret = utilitario.schema({x:100, y: "fdnsjx9"}, {
+                cast: "object",
+                object: {
+                    x: {
+                        constraints: {
+                            integer: ["integer constraint fail"]
+                        },
+                        cast: "integer"
+                    },
+                    y: {
+                        constraints: {
+                            string: ["string constraint fail"]
+                        },
+                        cast: "string"
+                    },
+                    z: {
+                        constraints: {
+                            string: ["string constraint fail"]
+                        },
+                        cast: "string"
+                    }
+                }
+            }, errors);
 
+
+        t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
+        t.deepEqual(errors, ["z is undefined"], "errors");
+
+        t.end();
+    });
+
+
+    test("rValidate && validate", function(t) {
+        var errors = [],
+            ret = utilitario.schema({x:100, y: "fdnsjx9"}, {
+                cast: "object",
+                constraints: {
+                    keys: [["x", "y", "z"], "missing some keys"]
+                },
+                object: {
+                    x: {
+                        constraints: {
+                            integer: ["integer constraint fail"]
+                        },
+                        cast: "integer"
+                    },
+                    y: {
+                        constraints: {
+                            string: ["string constraint fail"]
+                        },
+                        cast: "string"
+                    },
+                    z: {
+                        constraints: {
+                            string: ["string constraint fail"]
+                        },
+                        cast: "string"
+                    }
+                }
+            }, errors);
+
+
+        t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
+        t.deepEqual(errors, ["missing some keys","z is undefined"], "errors");
+
+        t.end();
+    });
+
+
+    test("rValidate && validate", function(t) {
+        var errors = [],
+            ret = utilitario.schema([10, 20, 30, "x"], {
+                cast: "array",
+                items: {
+                    constraints: {
+                        integer: ["integer constraint fail"]
+                    },
+                    cast: "integer"
+                }
+            }, errors);
+
+
+        t.deepEqual(ret, [10, 20, 30, 0], "casted");
+        t.deepEqual(errors, ["integer constraint fail"], "errors");
+
+        t.end();
+    });
 
 }());
