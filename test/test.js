@@ -504,4 +504,62 @@ process.exit();
         t.end();
     });
 
+    test("home schema array test", function(t) {
+        // example array of integers
+        var array_schema = {
+            cast: "array", // mandatory
+            items: {
+                constraints: {
+                    "integer": ["some elements in the array are not integers"],
+                },
+                cast: "integer"
+            } // schema that all elements must fulfill
+        }
+
+        // tap test
+        var errors = [];
+        t.deepEqual(utilitario.schema([1,2,"3"], array_schema, errors), [1,2,3], "ok!");
+        t.deepEqual(errors, [], "no errors");
+
+        errors = [];
+        t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
+        t.deepEqual(errors, ["some elements in the array are not integers"], "with errors");
+
+        t.end();
+    });
+
+    test("home schema object test", function(t) {
+        // example
+        var object_schema = {
+            cast: "object", // mandatory
+            object: {
+                int: {
+                    constraints: {
+                        "integer": ["int key is not a valid integer"],
+                    },
+                    cast: "integer"
+                },
+                string: {
+                    constraints: {
+                        "string": ["string key is not a valid string"],
+                    },
+                    cast: "string"
+                }
+            }
+        }
+
+        // tap test
+        var errors = [];
+        t.deepEqual(utilitario.schema({int: 10, string: "abc"}, object_schema, errors), {int: 10, string: "abc"}, "ok!");
+
+        errors = [];
+        t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
+        t.deepEqual(errors, ["int is undefined"], "notice that int was undefined");
+
+
+        t.end();
+
+    });
+
+
 }());

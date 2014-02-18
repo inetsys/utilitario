@@ -4,18 +4,45 @@
 
 ## note
 
-module is stable but not full featured yet.
+module is stable but not fully featured yet.
 
 ## Introduction
 
 Bulletproof identification (is), validation (constraints) and casting (cast).
 
 Throw him everything you have got: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
-That's the main objective of this module:
+What is the main objective of this module?
 * Identify every javascript primitive.
-* Validate any input, respond false is not an acceptable input.
-* cast anything into something.
-* Will throw if you configure it to do so. Like allow_nan = false, very useful for development.
+* Validate any input, giving multiple errors, not just true/false. Something to debug properly.
+* cast anything into something, obvious but null means "cannot be casted".
+* optional throw for user input. Like allow_nan = false.
+* throw for developer input. Like required callbacks, invalid schema objects, etc.
+
+## Overview
+
+```js
+
+require("utilitario");
+
+{ options:
+    {
+        allow_nan: false, // allow NaN to be returned while casting ?
+        timestamps_as_date: true, // treat numbers as valid dates
+        throw_invalid_casts: false, // self explanatory
+        cast_string_to_array_split: false, // cast.array should treat string as possible array? fill the split character
+        cast_nan_to_zero: true // be extra caution with this, zero could be invalid in your app an also NaN
+    },
+    is:          { /* Function to identify input */},
+    parse:       { /* parse your input from a given representation like json-string */ },
+    transform:   { /* transform/sanitize your inputs*/ },
+    constraints: {/* validations */ },
+    cast:        {/* casts */ },
+    validate: [Function: __validate],
+    schema: [Function: __schema],
+    sanitize: [Function: __sanitize]
+}
+
+```
 
 ## is
 
@@ -38,7 +65,8 @@ functions included
 * date(val)
 * json(val)
 
-The next table show what happens in every input you can throw at those functions.
+The following table show what happens in every input you can throw at those functions.
+
 
 ```
 
@@ -97,11 +125,14 @@ The next table show what happens in every input you can throw at those functions
 
 
 ```
-If you like that table, you can do it yourself using: [cli-table](https://github.com/LearnBoost/cli-table)
+If you like that table, you can do it yourself using: [cli-table](https://github.com/LearnBoost/cli-table) :)
 
 
 
 ## cast
+
+Force input to be valid is ok. But force input to be a type is even better.
+Like always the following table show the behavior of cast functions given any input. *null* is used as "cannot be casted" output.
 
 ```
 ┌──────────────────┬───┬─────┬──────────┬──────────┬──────┬──────────────────────┬──────────────┐
@@ -140,10 +171,143 @@ If you like that table, you can do it yourself using: [cli-table](https://github
 ```
 
 
+## schema
+Check anything against given schema.
+Mix every functionality in "is", "constraints" & "cast" to give a fully input validation solution.
+
+
+```js
+
+require("utilitario").schema(mixed, structure/*object*/, errors/*array by reference*/, options/*optional, object*/, __path/*internal*/);
+
+// example
+var errors = [],
+    ret = utilitario.schema("100", {
+        constraints: {
+            "integer": ["integer constraint fail"],
+        },
+        cast: "integer"
+    }, errors);
+
+// tap test
+t.deepEqual(ret, 100, "is 100 number");
+t.deepEqual(errors, [], "no errors");
+
+```
+
+Structure object
+
+**Schema Leaf (anything not array/object)**
+
+```js
+var schema = {
+    // array of object
+    constraints: [{
+        // key: array, the last item MUST be a string, that represent the error string
+        // the items before the error are the arguments for the constraint
+        constraint_function_name: [arguments, "error"],
+
+        // example
+        length: [5, 20, "string is too long or too short"]
+
+        // as many as you want...
+    }],
+
+    sanitize: [{
+        transform_function_name: [arguments],
+
+        // example
+        lowercase: null // null is permitted as input, meaning no arguments
+        stripTags: ["<strong><b><i><em>"]
+    }],
+
+    // default value, if any constraints fail, or optional=true
+    default: "anytype", // mixed
+
+    // cast is always called, even if you use a default value.
+    cast: "string",
+}
+```
+
+There is two additions to constraints: nullable and optional. Both are considered as final constrains once they are true, nothing more is tested.
+
+
+**Schema Trunk (array/object, those that are recursive)**
+
+**array**
+```js
+{
+    cast: "array", // mandatory
+    items: "Schema Leaf/Trunk object" // schema that all elements must fulfill
+}
+
+// example array of integers
+var array_schema = {
+    cast: "array", // mandatory
+    items: {
+        constraints: {
+            "integer": ["some elements in the array are not integers"],
+        },
+        cast: "integer"
+    } // schema that all elements must fulfill
+}
+
+// tap test
+var errors = [];
+t.deepEqual(utilitario.schema([1,2,"3"], array_schema, errors), [1,2,3], "ok!");
+t.deepEqual(errors, [], "no errors");
+
+errors = [];
+t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
+t.deepEqual(errors, ["some elements in the array are not integers"], "with errors");
+```
+
+**object**
+```js
+{
+    cast: "object", // mandatory
+    object: {
+        key: "Schema Leaf/Trunk object" // schema that given key must fulfill
+    }
+}
+
+// example
+var object_schema = {
+    cast: "object", // mandatory
+    object: {
+        int: {
+            constraints: {
+                "integer": ["int key is not a valid integer"],
+            },
+            cast: "integer"
+        },
+        string: {
+            constraints: {
+                "string": ["string key is not a valid string"],
+            },
+            cast: "string"
+        }
+    }
+}
+
+// tap test
+var errors = [];
+t.deepEqual(utilitario.schema({int: 10, string: "abc"}, object_schema, errors), {int: 10, string: "abc"}, "ok!");
+
+errors = [];
+t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
+t.deepEqual(errors, ["int is undefined"], "notice that int was undefined");
+
+
+```
 
 ## Dependencies
 
 [node-querystring](https://github.com/visionmedia/node-querystring)
+
+[object-enhancements](https://github.com/llafuente/object-enhancements)
+
+[array-enhancements](https://github.com/llafuente/array-enhancements)
 
 
 *Developement*
@@ -156,23 +320,24 @@ If you like that table, you can do it yourself using: [cli-table](https://github
 ## Performance
 
 * typeof is called many times, but it should be fast enough.
-* has many internal calls to avoid code duplication, could perform faster, pull request :)
-* is.json use JSON.parse use it with caution, maybe it's better to parse directly.
+* has many internal calls to avoid code duplication, in the future those call could be inlined.
+* is.json use JSON.parse, use it with caution, maybe it's better to parse directly.
 
 ## Install
 
 With [npm](http://npmjs.org) do:
 
-```
+```sh
 
-npm install node-class
+npm install utilitario
+
 
 ```
 
 ## test (travis-ci ready!)
 
 
-```
+```sh
 
 npm test
 // or
