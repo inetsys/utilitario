@@ -561,5 +561,24 @@ process.exit();
 
     });
 
+    test("string to binary", function(t) {
+        // example
+        var object_schema = {
+            cast: "binary",
+            sanitize: {"hexToBin": null},
+            constraints: {}
+        }
+
+        // tap test
+        var errors = [];
+        t.deepEqual(
+                utilitario.schema("a88b8622c0ef93b2c1cf3718dec6132e", object_schema, errors),
+                new Buffer("a88b8622c0ef93b2c1cf3718dec6132e", "hex"), "ok!");
+
+
+        t.end();
+
+    });
+
 
 }());
