@@ -1,6 +1,6 @@
-
-
 # utilitario [![Build Status](https://secure.travis-ci.org/llafuente/utilitario.png?branch=master)](http://travis-ci.org/llafuente/utilitario)
+
+![NPM](https://nodei.co/npm/utilitario.png?compact=true)
 
 ## note
 

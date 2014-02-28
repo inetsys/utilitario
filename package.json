@@ -3,8 +3,7 @@
   "version": "0.0.2",
   "description": "Bulletproof identification (is), validation (constraints) and casting (cast)",
   "main": "./index.js",
-  "keywords": [
-  ],
+  "keywords": [],
   "directories": {
     "lib": ".",
     "test": "test"
@@ -27,47 +26,48 @@
     "node": ">=0.6"
   },
   "dependencies": {
-    "qs" : "*",
+    "qs": "*",
     "object-enhancements": "*",
-    "array-enhancements": "*"
+    "array-enhancements": "*",
+    "is-html": "~0.1.1"
   },
   "devDependencies": {
     "tap": "~0.4.4",
     "ass": "0.0.4",
-    "cli-table" : "*"
+    "cli-table": "*"
   },
   "jshintConfig": {
-      "white": true,
-      "curly": true,
-      "eqeqeq": true,
-      "indent": 4,
-      "asi": false,
-      "boss": false,
-      "browser": true,
-      "devel": true,
-      "maxdepth": 4,
-      "maxstatements": 25,
-      "maxcomplexity": 6,
-      "eqnull": true,
-      "es5": true,
-      "evil": false,
-      "immed": false,
-      "jquery": true,
-      "latedef": false,
-      "laxcomma": true,
-      "laxbreak": true,
-      "newcap": true,
-      "node": true,
-      "noempty": true,
-      "nonew": true,
-      "predef": [
-        "log"
-      ],
-      "quotmark": "double",
-      "smarttabs": false,
-      "strict": true,
-      "trailing": true,
-      "undef": true,
-      "unused": true
-    }
+    "white": true,
+    "curly": true,
+    "eqeqeq": true,
+    "indent": 4,
+    "asi": false,
+    "boss": false,
+    "browser": true,
+    "devel": true,
+    "maxdepth": 4,
+    "maxstatements": 25,
+    "maxcomplexity": 6,
+    "eqnull": true,
+    "es5": true,
+    "evil": false,
+    "immed": false,
+    "jquery": true,
+    "latedef": false,
+    "laxcomma": true,
+    "laxbreak": true,
+    "newcap": true,
+    "node": true,
+    "noempty": true,
+    "nonew": true,
+    "predef": [
+      "log"
+    ],
+    "quotmark": "double",
+    "smarttabs": false,
+    "strict": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true
+  }
 }
