@@ -2,51 +2,71 @@
 
 ![NPM](https://nodei.co/npm/utilitario.png?compact=true)
 
-## note
+## Preface
 
 module is stable but not fully featured yet.
 
+
 ## Introduction
 
-Bulletproof identification (is), validation (constraints) and casting (cast).
+Bulletproof identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*).
 
-Throw him everything you have got: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
-What is the main objective of this module?
-* Identify every javascript primitive.
+**You shouldn't trust user-input. Users are evil.**
+
+
+## Utilitario objectives
+
+* Support any user-input in any function: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
+* Identify every Javascript primitive strictly and lossy.
 * Validate any input, giving multiple errors, not just true/false. Something to debug properly.
-* cast anything into something, obvious but null means "cannot be casted".
-* optional throw for user input. Like allow_nan = false.
-* throw for developer input. Like required callbacks, invalid schema objects, etc.
+* Cast anything into something, obvious but null means "cannot be casted".
+* Optionals throws for user input. Like allow_nan = false.
+* Throw for developer input. Like required callbacks, invalid schema objects, etc.
+
 
 ## Overview
 
 ```js
 
-require("utilitario");
+var utilitario = require("utilitario");
 
-{ options:
-    {
-        allow_nan: false, // allow NaN to be returned while casting ?
-        timestamps_as_date: true, // treat numbers as valid dates
-        throw_invalid_casts: false, // self explanatory
-        cast_string_to_array_split: false, // cast.array should treat string as possible array? fill the split character
-        cast_nan_to_zero: true // be extra caution with this, zero could be invalid in your app an also NaN
-    },
-    is:          { /* Function to identify input */},
-    parse:       { /* parse your input from a given representation like json-string */ },
-    transform:   { /* transform/sanitize your inputs*/ },
-    constraints: {/* validations */ },
-    cast:        {/* casts */ },
-    validate: [Function: __validate],
-    schema: [Function: __schema],
-    sanitize: [Function: __sanitize]
-}
+utilitario.options.xxx = true; /*set option*/
+
+// options:
+utilitario.options = {
+    // allow NaN to be returned while casting ?
+    allow_nan: false,
+
+    // treat numbers as valid dates
+    timestamps_as_date: true,
+
+    // self explanatory
+    throw_invalid_casts: false,
+
+    // cast.array should treat string as possible array? fill the split character if you think so...
+    cast_string_to_array_split: false,
+
+    // be extra caution with this, zero could be invalid in your app an also NaN
+    cast_nan_to_zero: true
+};
+
+// collection of functions ordered
+utilitario.is =          { /* Functions to identify input */},
+utilitario.parse =       { /* parse your input from a given representation like json-string */ },
+utilitario.transform =   { /* transform/sanitize your inputs*/ },
+utilitario.constraints = {/* validations */ },
+utilitario.cast =        {/* casts */ },
+
+// 3 utils to conquer the world!
+utilitario.validate();
+utilitario.schema();
+utilitario.sanitize();
+
 
 ```
 
 ## is
 
-functions included
 * dateStrict(val)
 * numberStrict(val)
 * decimal(val)
@@ -61,18 +81,21 @@ functions included
 * regex(val)
 * object(val)
 * string(val)
+* html(val)
 * array(val)
 * date(val)
 * json(val)
+* boolean(val)
 
-The following table show what happens in every input you can throw at those functions.
+
+The following table show the relation input/output of every function above.
 
 
 ```
 
 ┌─────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
-│type                 │date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
-│                     │Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
+│input                │date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
+│type                 │Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
 ├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
 │undefined            │false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
 │[object Undefined]   │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
@@ -125,13 +148,13 @@ The following table show what happens in every input you can throw at those func
 
 
 ```
-If you like that table, you can do it yourself using: [cli-table](https://github.com/LearnBoost/cli-table) :)
+If you like that table, you can do it yourself using: [LearnBoost/cli-table](https://github.com/LearnBoost/cli-table) :)
 
 
 
 ## cast
 
-Force input to be valid is ok. But force input to be a type is even better.
+Force input to be valid is ok. Force to be valid and a type is even better.
 Like always the following table show the behavior of cast functions given any input. *null* is used as "cannot be casted" output.
 
 ```
@@ -172,8 +195,7 @@ Like always the following table show the behavior of cast functions given any in
 
 
 ## schema
-Check anything against given schema.
-Mix every functionality in "is", "constraints" & "cast" to give a fully input validation solution.
+Check anything against given schema to have fully input validation/sanitize/transform/cast solution.
 
 
 ```js
@@ -345,6 +367,103 @@ cd /test
 node test-class.js
 
 ```
+
+## REPL
+
+```js
+
+luis@luis-dev:~/noboxout/node-expressionist$ node
+> require("utilitario")
+{ options:
+   { allow_nan: false,
+     timestamps_as_date: true,
+     throw_invalid_casts: false,
+     cast_string_to_array_split: false,
+     cast_nan_to_zero: true },
+  is:
+   { dateStrict: [Function],
+     numberStrict: [Function],
+     decimal: [Function],
+     integer: [Function],
+     nan: [Function],
+     nullStrict: [Function],
+     null: [Function],
+     notNull: [Function],
+     empty: [Function],
+     infinite: [Function],
+     notEmpty: [Function],
+     regex: [Function],
+     object: [Function],
+     string: [Function],
+     html: [Function],
+     array: [Function],
+     date: [Function],
+     json: [Function],
+     boolean: [Function] },
+  parse:
+   { string: [Function],
+     querystring: [Function],
+     json: [Function],
+     url: [Function] },
+  transform:
+   { querystring: [Function],
+     json: [Function],
+     length: [Function],
+     lowercase: [Function],
+     uppercase: [Function],
+     escapeHTML: [Function],
+     stripTags: [Function],
+     hexToBin: [Function],
+     toCamelCase: [Function],
+     camelToDash: [Function],
+     toUnderscore: [Function],
+     trim: [Function] },
+  constraints:
+   { keys: [Function],
+     in: [Function],
+     notIn: [Function],
+     contains: [Function],
+     notContains: [Function],
+     equals: [Function],
+     notEquals: [Function],
+     equalsStrict: [Function],
+     notEqualsStrict: [Function],
+     regex: [Function],
+     notRegex: [Function],
+     dateAfter: [Function],
+     dateBefore: [Function],
+     email: [Function],
+     url: [Function],
+     alpha: [Function],
+     alphanumeric: [Function],
+     numeric: [Function],
+     hexadecimal: [Function],
+     hexColor: [Function],
+     length: [Function],
+     UUIDv3: [Function],
+     UUIDv4: [Function],
+     UUIDv5: [Function],
+     min: [Function],
+     max: [Function],
+     ip: [Function],
+     ip4: [Function],
+     ip6: [Function] },
+  cast:
+   { integer: [Function],
+     float: [Function],
+     string: [Function],
+     date: [Function],
+     regex: [Function],
+     object: [Function],
+     array: [Function],
+     binary: [Function] },
+  validate: [Function: __validate],
+  schema: [Function: __schema],
+  sanitize: [Function: __sanitize] }
+>
+
+```
+
 
 ## license
 

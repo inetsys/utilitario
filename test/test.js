@@ -112,11 +112,11 @@ process.exit();
     });
 
 
-    //test("print is table", function (t) {
-    //    console.log(utilitario.is);
-    //    console.log(table.toString());
-    //    t.end();
-    //});
+    test("print is table", function (t) {
+        console.log(utilitario.is);
+        console.log(table.toString());
+        t.end();
+    });
 
 
     test("cast", function (t) {
@@ -572,7 +572,7 @@ process.exit();
         // tap test
         var errors = [];
         t.deepEqual(
-                utilitario.schema("a88b8622c0ef93b2c1cf3718dec6132e", object_schema, errors),
+                utilitario.schema("a88b8622c0ef93b2c1cf3718dec6132e", object_schema, errors, {sanitize:true}),
                 new Buffer("a88b8622c0ef93b2c1cf3718dec6132e", "hex"), "ok!");
 
 
