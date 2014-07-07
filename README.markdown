@@ -2,26 +2,24 @@
 
 ![NPM](https://nodei.co/npm/utilitario.png?compact=true)
 
-## Preface
-
-module is stable but not fully featured yet.
-
 
 ## Introduction
 
-Bulletproof identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*).
+Bulletproof identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*) for Javascript types.
+
+Remember!
 
 **You shouldn't trust user-input. Users are evil.**
 
 
 ## Utilitario objectives
 
-* Support any user-input in any function: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
+* Support any user-input anywhere: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
 * Identify every Javascript primitive strictly and lossy.
-* Validate any input, giving multiple errors, not just true/false. Something to debug properly.
-* Cast anything into something, obvious but null means "cannot be casted".
-* Optionals throws for user input. Like allow_nan = false.
-* Throw for developer input. Like required callbacks, invalid schema objects, etc.
+* Validate any input, giving multiple-meaningful errors, not just true/false. Something to debug properly.
+* Cast anything into something, and obvious but null means "cannot be casted".
+* Optional exceptions for user input.
+* Exceptions for developer input: required callbacks, invalid schema objects, etc.
 
 
 ## Overview
@@ -40,10 +38,11 @@ utilitario.options = {
     // treat numbers as valid dates
     timestamps_as_date: true,
 
-    // self explanatory
+    // throw or return null ?
     throw_invalid_casts: false,
 
-    // cast.array should treat string as possible array? fill the split character if you think so...
+    // cast.array should treat string as a possible array?
+    // fill the split character if you think so...
     cast_string_to_array_split: false,
 
     // be extra caution with this, zero could be invalid in your app an also NaN
@@ -54,8 +53,8 @@ utilitario.options = {
 utilitario.is =          { /* Functions to identify input */},
 utilitario.parse =       { /* parse your input from a given representation like json-string */ },
 utilitario.transform =   { /* transform/sanitize your inputs*/ },
-utilitario.constraints = {/* validations */ },
-utilitario.cast =        {/* casts */ },
+utilitario.constraints = { /* validations */ },
+utilitario.cast =        { /* casts */ },
 
 // 3 utils to conquer the world!
 utilitario.validate();
@@ -67,131 +66,122 @@ utilitario.sanitize();
 
 ## is
 
-* dateStrict(val)
-* numberStrict(val)
-* decimal(val)
-* integer(val)
-* nan(val)
-* nullStrict(val)
-* null(val)
-* notNull(val)
-* empty(val)
-* infinite(val)
-* notEmpty(val)
-* regex(val)
-* object(val)
-* string(val)
-* html(val)
-* array(val)
-* date(val)
-* json(val)
-* boolean(val)
-
-
-The following table show the relation input/output of every function above.
-
-
-```
-
-┌─────────────────────┬──────┬──────┬───────┬───────┬─────┬──────┬─────┬─────┬─────┬────────┬─────┬─────┬──────┬──────┬─────┬─────┬─────┐
-│input                │date  │number│decimal│integer│nan  │null  │null │not  │empty│infinite│not  │regex│object│string│array│date │json │
-│type                 │Strict│Strict│       │       │     │Strict│     │Null │     │        │Empty│     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│undefined            │false │false │false  │false  │false│false │true │false│true │false   │false│false│false │false │false│false│false│
-│[object Undefined]   │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│null                 │false │false │false  │false  │false│true  │true │false│true │false   │false│false│false │false │false│false│false│
-│[object Null]        │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│0                    │false │true  │true   │true   │false│false │true │false│true │false   │false│false│false │false │false│false│false│
-│[object Number]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│100                  │false │true  │true   │true   │false│false │false│true │false│false   │true │false│false │false │false│true │false│
-│[object Number]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│'100'                │false │false │true   │true   │false│false │false│true │false│false   │true │false│false │true  │false│true │true │
-│[object String]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│''                   │false │false │false  │false  │false│false │true │false│true │false   │false│false│false │true  │false│false│false│
-│[object String]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│{}                   │false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │false│false│false│
-│[object Object]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│{ xx: true }         │false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│false│false│
-│[object Object]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│[]                   │false │false │false  │false  │false│false │false│true │true │false   │false│false│true  │false │true │false│false│
-│[object Array]       │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│[ 10 ]               │false │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │true │false│false│
-│[object Array]       │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│////                 │false │false │false  │false  │false│false │false│true │false│false   │true │true │true  │false │false│false│false│
-│[object RegExp]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│2014 01 01 ...       │true  │false │false  │false  │false│false │false│true │false│false   │true │false│true  │false │false│true │false│
-│[object Date]        │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│NaN                  │false │true  │true   │true   │true │false │true │false│true │false   │false│false│false │false │false│false│false│
-│[object Number]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│Infinity             │false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
-│[object Number]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│-Infinity            │false │true  │true   │true   │false│false │false│true │false│true    │true │false│false │false │false│false│false│
-│[object Number]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-├─────────────────────┼──────┼──────┼───────┼───────┼─────┼──────┼─────┼─────┼─────┼────────┼─────┼─────┼──────┼──────┼─────┼─────┼─────┤
-│'{"json_test":true}' │false │false │false  │false  │false│false │false│true │false│false   │true │false│false │true  │false│false│true │
-│[object String]      │      │      │       │       │     │      │     │     │     │        │     │     │      │      │     │     │     │
-└─────────────────────┴──────┴──────┴───────┴───────┴─────┴──────┴─────┴─────┴─────┴────────┴─────┴─────┴──────┴──────┴─────┴─────┴─────┘
-
-
-```
-If you like that table, you can do it yourself using: [LearnBoost/cli-table](https://github.com/LearnBoost/cli-table) :)
-
+* `dateStrict` (Mixed val)
+* `numberStrict` (Mixed val)
+* `decimal` (Mixed val)
+* `integer` (Mixed val)
+* `nan` (Mixed val)
+* `nullStrict` (Mixed val)
+* `null` (Mixed val)
+* `notNull` (Mixed val)
+* `empty` (Mixed val)
+* `infinite` (Mixed val)
+* `notEmpty` (Mixed val)
+* `regex` (Mixed val)
+* `object` (Mixed val)
+* `string` (Mixed val)
+* `html` (Mixed val)
+* `array` (Mixed val)
+* `date` (Mixed val)
+* `json` (Mixed val)
+* `boolean` (Mixed val)
 
 
 ## cast
 
 Force input to be valid is ok. Force to be valid and a type is even better.
-Like always the following table show the behavior of cast functions given any input. *null* is used as "cannot be casted" output.
 
-```
-┌──────────────────┬───┬─────┬──────────┬──────────┬──────┬──────────────────────┬──────────────┐
-│type              │int│float│string    │date      │regex │object                │array         │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│100               │100│100  │'100'     │1970 01 01│null  │null                  │null          │
-│[object Number]   │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│'100'             │100│100  │'100'     │100 01 01 │/100/ │null                  │null          │
-│[object String]   │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│null              │0  │0    │null      │null      │null  │null                  │null          │
-│[object Null]     │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│undefined         │0  │0    │null      │null      │null  │null                  │null          │
-│[object Undefined]│   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│{ x: true }       │0  │0    │null      │null      │null  │{ x: true }           │null          │
-│[object Object]   │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│[]                │0  │0    │''        │null      │null  │{}                    │[]            │
-│[object Array]    │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│null              │0  │0    │null      │null      │null  │null                  │null          │
-│[object Null]     │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│NaN               │0  │0    │null      │null      │null  │null                  │null          │
-│[object Number]   │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│'ok!!'            │0  │0    │'ok!!'    │null      │/ok!!/│null                  │null          │
-│[object String]   │   │     │          │          │      │                      │              │
-├──────────────────┼───┼─────┼──────────┼──────────┼──────┼──────────────────────┼──────────────┤
-│[ 500, , 100 ]    │0  │0    │'500,,100'│null      │null  │{ '0': 500, '2': 100 }│[ 500, , 100 ]│
-│[object Array]    │   │     │          │          │      │                      │              │
-└──────────────────┴───┴─────┴──────────┴──────────┴──────┴──────────────────────┴──────────────┘
-```
+When casting *null* is synonym of "cannot be casted"
+
+* `integer` (val)
+* `float` (val)
+* `string` (val)
+* `date` (val)
+* `regex` (value)
+* `object` (val)
+* `array` (val)
+* `boolean` (val)
+* `binary` (bin)
+
+
+If you want exceptions on invalid castings setup utilitario with:
+* `throw_invalid_casts` = true
+* `allow_nan` = true
+
+
+## constraints
+
+* `keys` (value, keys)
+* `in` (needle, haystack)
+* `notIn` (needle, haystack)
+* `contains` (needle, haystack)
+* `notContains` (needle, haystack)
+* `equals` (a, b)
+* `notEquals` (a, b)
+* `equalsStrict` (a, b)
+* `notEqualsStrict` (a, b)
+* `regex` (str, pattern, modifiers)
+* `notRegex` (str, pattern, modifiers)
+* `dateAfter` (str, date)
+* `dateBefore` (str, date)
+* `email` (str)
+* `url` (str)
+* `alpha` (val)
+* `alphanumeric` (val)
+* `numeric` (val)
+* `hexadecimal` (str)
+* `hexColor` (str)
+* `length` (val, min, max)
+* `UUIDv3` (val)
+* `UUIDv4` (val)
+* `UUIDv5` (val)
+* `min` (val, min)
+* `max` (val, max)
+* `ip` (str)
+* `ip4` (str)
+* `ip6` (str)
+* `buffer` (val)
+
+## parse
+
+Parse given
+
+* `string` (val)
+
+  Try to transform a string into the perfect javascript representation.
+
+  Did you notice the evilness? useful but risky.
+
+  * "undefined" -> undefined
+  * "null" -> null
+  * "true" -> true
+  * "false" -> false
+  * "NaN" -> NaN
+  * "Infinity" -> Infinity
+  * is.decimal -> cast.number
+
+* `querystring` (val)
+* `json` (val)
+* `url` (urlStr, parseQueryString, slashesDenoteHost)
+
+## transform
+
+Transform given value into destination representation.
+
+json is an alias JSON.stringify
+
+* `querystring` (val)
+* `json` (val)
+* `length` (val, max)
+* `lowercase` (val)
+* `uppercase` (val)
+* `escapeHTML` (val)
+* `stripTags` (input, allowed)
+* `hexToBin` (val)
+* `toCamelCase` (val)
+* `camelToDash` (val)
+* `toUnderscore` (val)
+* `trim`(val)
 
 
 ## schema
