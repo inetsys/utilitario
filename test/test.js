@@ -381,7 +381,7 @@ process.exit();
 
     test("rValidate && validate", function(t) {
 
-        var errors = [],
+        var errors = {},
             ret = utilitario.schema("100", {
                 constraints: {
                     "integer": ["integer constraint fail"],
@@ -391,31 +391,31 @@ process.exit();
 
 
         t.deepEqual(ret, 100, "is 100 number");
-        t.deepEqual(errors, [], "no errors");
-
+        t.deepEqual(errors, {}, "no errors");
         t.end();
     });
 
     test("rValidate && validate", function(t) {
 
-        var errors = [],
+        var errors = {},
             ret = utilitario.schema("x100", {
                 constraints: {
                     "integer": ["integer constraint fail"],
                 },
-                cast: "integer"
+                cast: "integer",
+                base_path: "number"
             }, errors);
 
 
         t.deepEqual(ret, 0, "is 100 number");
-        t.deepEqual(errors, ["integer constraint fail"], "errors");
+        t.deepEqual(errors, {"number": ["integer constraint fail"]}, "errors");
 
         t.end();
     });
 
     test("rValidate && validate", function(t) {
 
-        var errors = [],
+        var errors = {},
             ret = utilitario.schema({x:100, y: "fdnsjx9"}, {
                 cast: "object",
                 object: {
@@ -442,14 +442,14 @@ process.exit();
 
 
         t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
-        t.deepEqual(errors, ["z is undefined"], "errors");
+        t.deepEqual(errors, {z: ["is undefined"]}, "errors");
 
         t.end();
     });
 
 
     test("rValidate && validate", function(t) {
-        var errors = [],
+        var errors = {},
             ret = utilitario.schema({x:100, y: "fdnsjx9"}, {
                 cast: "object",
                 constraints: {
@@ -474,19 +474,40 @@ process.exit();
                         },
                         cast: "string"
                     }
-                }
+                },
+                base_path: "entity"
             }, errors);
 
 
         t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
-        t.deepEqual(errors, ["missing some keys","z is undefined"], "errors");
+        t.deepEqual(errors, {"entity": ["missing some keys"], "entity.z": ["is undefined"]}, "errors");
 
         t.end();
     });
 
+    test("validation messages / true", function(t) {
+        var errors = {},
+            ret = utilitario.schema([10, 20, 30, "x"], {
+                cast: "array",
+                items: {
+                    constraints: {
+                        integer: true
+                    },
+                    messages: {
+                        integer: "integer constraint fail"
+                    },
+                    cast: "integer"
+                }
+            }, errors);
+
+        t.deepEqual(ret, [10, 20, 30, 0], "casted");
+        t.deepEqual(errors, {3: ["integer constraint fail"]}, "errors");
+
+        t.end();
+    });
 
     test("rValidate && validate", function(t) {
-        var errors = [],
+        var errors = {},
             ret = utilitario.schema([10, 20, 30, "x"], {
                 cast: "array",
                 items: {
@@ -499,7 +520,7 @@ process.exit();
 
 
         t.deepEqual(ret, [10, 20, 30, 0], "casted");
-        t.deepEqual(errors, ["integer constraint fail"], "errors");
+        t.deepEqual(errors, {3: ["integer constraint fail"]}, "errors");
 
         t.end();
     });
@@ -517,13 +538,13 @@ process.exit();
         }
 
         // tap test
-        var errors = [];
+        var errors = {};
         t.deepEqual(utilitario.schema([1,2,"3"], array_schema, errors), [1,2,3], "ok!");
-        t.deepEqual(errors, [], "no errors");
+        t.deepEqual(errors, {}, "no errors");
 
-        errors = [];
+        errors = {};
         t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
-        t.deepEqual(errors, ["some elements in the array are not integers"], "with errors");
+        t.deepEqual(errors, {0: ["some elements in the array are not integers"]}, "with errors");
 
         t.end();
     });
@@ -549,12 +570,13 @@ process.exit();
         }
 
         // tap test
-        var errors = [];
+        var errors = {};
         t.deepEqual(utilitario.schema({int: 10, string: "abc"}, object_schema, errors), {int: 10, string: "abc"}, "ok!");
+        t.deepEqual(errors, {}, "no errors");
 
-        errors = [];
+        errors = {};
         t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
-        t.deepEqual(errors, ["int is undefined"], "notice that int was undefined");
+        t.deepEqual(errors, {int: ["is undefined"]}, "notice that int was undefined");
 
 
         t.end();
@@ -570,10 +592,30 @@ process.exit();
         }
 
         // tap test
-        var errors = [];
+        var errors = {};
         t.deepEqual(
                 utilitario.schema("a88b8622c0ef93b2c1cf3718dec6132e", object_schema, errors, {sanitize:true}),
                 new Buffer("a88b8622c0ef93b2c1cf3718dec6132e", "hex"), "ok!");
+
+
+        t.end();
+
+    });
+
+
+    test("truncate", function(t) {
+        // tap test
+        t.equal(utilitario.truncate.maxLength("123456", 4), "1234", "maxLength -> 1234");
+        t.equal(utilitario.truncate.min(101, 4), 4, "min(101,4) -> 4");
+        t.equal(utilitario.truncate.min(3, 4), 3, "min(3,4) -> 3");
+
+        var d =  new Date(),
+            dd = new Date();
+
+        dd.setTime(d.getTime() + 1000);
+
+        t.equal(utilitario.truncate.dateAfter(d, dd).toString(), dd.toString(), "");
+        t.equal(utilitario.truncate.dateBefore(d, dd).toString(), d.toString(), "");
 
 
         t.end();

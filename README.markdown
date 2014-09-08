@@ -54,6 +54,7 @@ utilitario.is =          { /* Functions to identify input */},
 utilitario.parse =       { /* parse your input from a given representation like json-string */ },
 utilitario.transform =   { /* transform/sanitize your inputs*/ },
 utilitario.constraints = { /* validations */ },
+utilitario.truncate = { /* truncate input */ },
 utilitario.cast =        { /* casts */ },
 
 // 3 utils to conquer the world!
@@ -142,6 +143,14 @@ If you want exceptions on invalid castings setup utilitario with:
 * `ip6` (str)
 * `buffer` (val)
 
+## truncate
+
+* `maxLength` (val, max)
+* `min` (val, min)
+* `max` (val, max)
+* `dateAfter` (str, date)
+* `dateBefore` (str, date)
+
 ## parse
 
 Parse given
@@ -150,7 +159,7 @@ Parse given
 
   Try to transform a string into the perfect javascript representation.
 
-  Did you notice the evilness? useful but risky.
+  Did you *notice the evilness*? useful but risky.
 
   * "undefined" -> undefined
   * "null" -> null
@@ -168,10 +177,15 @@ Parse given
 
 Transform given value into destination representation.
 
-json is an alias JSON.stringify
 
 * `querystring` (val)
+
+  use `qs` module
+
 * `json` (val)
+
+  alias of JSON.stringify
+
 * `length` (val, max)
 * `lowercase` (val)
 * `uppercase` (val)
@@ -190,10 +204,10 @@ Check anything against given schema to have fully input validation/sanitize/tran
 
 ```js
 
-require("utilitario").schema(mixed, structure/*object*/, errors/*array by reference*/, options/*optional, object*/, __path/*internal*/);
+require("utilitario").schema(mixed, structure/*object*/, errors/*object by reference*/, options/*optional, object*/, __path/*internal*/);
 
 // example
-var errors = [],
+var errors = {},
     ret = utilitario.schema("100", {
         constraints: {
             "integer": ["integer constraint fail"],
@@ -203,7 +217,7 @@ var errors = [],
 
 // tap test
 t.deepEqual(ret, 100, "is 100 number");
-t.deepEqual(errors, [], "no errors");
+t.deepEqual(errors, {}, "no errors");
 
 ```
 
@@ -215,15 +229,22 @@ Structure object
 var schema = {
     // array of object
     constraints: [{
-        // key: array, the last item MUST be a string, that represent the error string
-        // the items before the error are the arguments for the constraint
-        constraint_function_name: [arguments, "error"],
+        // key: array|true
+        // There are two ways to define error message, use messages or add the string as last argument.
+        // messages has higher priority, at least one of those methods must define the error.
+        // messages is preferred.
+        constraint_function_name: [arguments, "error-optional"],
 
         // example
-        length: [5, 20, "string is too long or too short"]
+        length: [5, 20]
 
         // as many as you want...
     }],
+
+    // messages list, must have the same structure as constrains.
+    messages: {
+        "length": "string is too long or too short"
+    },
 
     sanitize: [{
         transform_function_name: [arguments],
@@ -238,6 +259,10 @@ var schema = {
 
     // cast is always called, even if you use a default value.
     cast: "string",
+
+    // empty by default
+    // base path for error reporting
+    base_path: ""
 }
 ```
 
@@ -258,20 +283,24 @@ var array_schema = {
     cast: "array", // mandatory
     items: {
         constraints: {
-            "integer": ["some elements in the array are not integers"],
+            "integer": true,
+        },
+        messages: {
+            integer: "some elements in the array are not integers"
         },
         cast: "integer"
-    } // schema that all elements must fulfill
+    }, // schema that all elements must fulfill
+    base_path: "list"
 }
 
 // tap test
-var errors = [];
+var errors = {};
 t.deepEqual(utilitario.schema([1,2,"3"], array_schema, errors), [1,2,3], "ok!");
-t.deepEqual(errors, [], "no errors");
+t.deepEqual(errors, {}, "no errors");
 
-errors = [];
+errors = {};
 t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
-t.deepEqual(errors, ["some elements in the array are not integers"], "with errors");
+t.deepEqual(errors, {"list.0": ["some elements in the array are not integers"]}, "with errors");
 ```
 
 **object**
@@ -303,12 +332,12 @@ var object_schema = {
 }
 
 // tap test
-var errors = [];
+var errors = {};
 t.deepEqual(utilitario.schema({int: 10, string: "abc"}, object_schema, errors), {int: 10, string: "abc"}, "ok!");
 
-errors = [];
+errors = {};
 t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
-t.deepEqual(errors, ["int is undefined"], "notice that int was undefined");
+t.deepEqual(errors, {int: ["is undefined"]}, "notice that int was undefined");
 
 
 ```
