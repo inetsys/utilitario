@@ -614,9 +614,12 @@ process.exit();
 
         dd.setTime(d.getTime() + 1000);
 
-        t.equal(utilitario.truncate.dateAfter(d, dd).toString(), dd.toString(), "");
-        t.equal(utilitario.truncate.dateBefore(d, dd).toString(), d.toString(), "");
+        t.equal(utilitario.truncate.dateAfter(d, dd).toString(), dd.toString(), "truncate.dateAfter");
+        t.equal(utilitario.truncate.dateBefore(d, dd).toString(), d.toString(), "truncate.dateBefore");
 
+        t.equal(utilitario.truncate.alphanumeric("1abfdjháöj$%&(0"), "1abfdjh__j____0", "truncate.alphanumeric");
+        t.equal(utilitario.truncate.alpha("1abfdjháöj$%&(0"), "_abfdjh__j_____", "truncate.alpha");
+        t.equal(utilitario.truncate.hexadecimal("0a8fuu"), "0a8f", "truncate.hexadecimal");
 
         t.end();
 

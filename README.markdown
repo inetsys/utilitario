@@ -5,16 +5,14 @@
 
 ## Introduction
 
-Bulletproof identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*) for Javascript types.
+Bulletproof identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*) and truncate (*truncate*) for Javascript types.
 
-Remember!
-
-**You shouldn't trust user-input. Users are evil.**
+Why? Because **You shouldn't trust user/developers input. Users are evil and developers are event worst (they wont read the docs jump to your outdated examples and issue you)**
 
 
 ## Utilitario objectives
 
-* Support any user-input anywhere: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
+* Support any input anywhere: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
 * Identify every Javascript primitive strictly and lossy.
 * Validate any input, giving multiple-meaningful errors, not just true/false. Something to debug properly.
 * Cast anything into something, and obvious but null means "cannot be casted".
@@ -150,6 +148,9 @@ If you want exceptions on invalid castings setup utilitario with:
 * `max` (val, max)
 * `dateAfter` (str, date)
 * `dateBefore` (str, date)
+* `alphanumeric:` (str, replacement)
+* `alpha:` (str, replacement)
+* `hexadecimal:` (str, replacement)
 
 ## parse
 
