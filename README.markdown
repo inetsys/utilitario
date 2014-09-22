@@ -196,7 +196,8 @@ Transform given value into destination representation.
 * `toCamelCase` (val)
 * `camelToDash` (val)
 * `toUnderscore` (val)
-* `trim`(val)
+* `trim` (val)
+* `removeDiacritics` (val)
 
 
 ## schema

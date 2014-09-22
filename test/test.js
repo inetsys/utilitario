@@ -626,4 +626,15 @@ process.exit();
     });
 
 
+    test("removeDiacritics", function(t) {
+        // tap test
+        t.equal(utilitario.transform.removeDiacritics("áéíóúä", 4), "aeioua", "Diacritics removed");
+
+        t.end();
+
+    });
+
+
+
+
 }());
