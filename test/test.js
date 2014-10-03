@@ -408,7 +408,7 @@ process.exit();
 
 
         t.deepEqual(ret, 0, "is 100 number");
-        t.deepEqual(errors, {"number": ["integer constraint fail"]}, "errors");
+        t.deepEqual(errors, {"number": [["integer constraint fail"]]}, "errors");
 
         t.end();
     });
@@ -442,7 +442,7 @@ process.exit();
 
 
         t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
-        t.deepEqual(errors, {z: ["is undefined"]}, "errors");
+        t.deepEqual(errors, {z: [["is undefined"]]}, "errors");
 
         t.end();
     });
@@ -480,7 +480,7 @@ process.exit();
 
 
         t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
-        t.deepEqual(errors, {"entity": ["missing some keys"], "entity.z": ["is undefined"]}, "errors");
+        t.deepEqual(errors, {"entity": [["missing some keys", ["x", "y", "z"]]], "entity.z": [["is undefined"]]}, "errors");
 
         t.end();
     });
@@ -501,7 +501,7 @@ process.exit();
             }, errors);
 
         t.deepEqual(ret, [10, 20, 30, 0], "casted");
-        t.deepEqual(errors, {3: ["integer constraint fail"]}, "errors");
+        t.deepEqual(errors, {3: [["integer constraint fail", true]]}, "errors");
 
         t.end();
     });
@@ -520,7 +520,7 @@ process.exit();
 
 
         t.deepEqual(ret, [10, 20, 30, 0], "casted");
-        t.deepEqual(errors, {3: ["integer constraint fail"]}, "errors");
+        t.deepEqual(errors, {3: [["integer constraint fail"]]}, "errors");
 
         t.end();
     });
@@ -544,7 +544,7 @@ process.exit();
 
         errors = {};
         t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
-        t.deepEqual(errors, {0: ["some elements in the array are not integers"]}, "with errors");
+        t.deepEqual(errors, {0: [["some elements in the array are not integers"]]}, "with errors");
 
         t.end();
     });
@@ -576,7 +576,7 @@ process.exit();
 
         errors = {};
         t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
-        t.deepEqual(errors, {int: ["is undefined"]}, "notice that int was undefined");
+        t.deepEqual(errors, {int: [["is undefined"]]}, "notice that int was undefined");
 
 
         t.end();

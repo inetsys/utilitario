@@ -302,7 +302,7 @@ t.deepEqual(errors, {}, "no errors");
 
 errors = {};
 t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
-t.deepEqual(errors, {"list.0": ["some elements in the array are not integers"]}, "with errors");
+t.deepEqual(errors, {"list.0": [["some elements in the array are not integers"], true]}, "with errors");
 ```
 
 **object**
@@ -339,7 +339,7 @@ t.deepEqual(utilitario.schema({int: 10, string: "abc"}, object_schema, errors), 
 
 errors = {};
 t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
-t.deepEqual(errors, {int: ["is undefined"]}, "notice that int was undefined");
+t.deepEqual(errors, {int: [["is undefined"]]}, "notice that int was undefined");
 
 
 ```
