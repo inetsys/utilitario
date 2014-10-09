@@ -1,6 +1,6 @@
 {
   "name": "utilitario",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Bulletproof identification (is), validation (constraints) and casting (cast)",
   "main": "./index.js",
   "keywords": [],
@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "qs": "*",
-    "object-enhancements": "*",
-    "is-html": "~0.1.1"
+    "is-html": "~0.1.1",
+    "lodash.clonedeep": "^2.4.1"
   },
   "devDependencies": {
     "tap": "~0.4.4",

@@ -15,7 +15,7 @@ Why? Because **You shouldn't trust user/developers input. Users are evil and dev
 * Support any input anywhere: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
 * Identify every Javascript primitive strictly and lossy.
 * Validate any input, giving multiple-meaningful errors, not just true/false. Something to debug properly.
-* Cast anything into something, and obvious but null means "cannot be casted".
+* Cast anything into something, and obvious but null means "*cannot be casted*".
 * Optional exceptions for user input.
 * Exceptions for developer input: required callbacks, invalid schema objects, etc.
 
@@ -29,23 +29,23 @@ var utilitario = require("utilitario");
 utilitario.options.xxx = true; /*set option*/
 
 // options:
-utilitario.options = {
-    // allow NaN to be returned while casting ?
-    allow_nan: false,
 
-    // treat numbers as valid dates
-    timestamps_as_date: true,
+// allow NaN to be returned while casting ?
+utilitario.options.allow_nan = false;
 
-    // throw or return null ?
-    throw_invalid_casts: false,
+// treat numbers as valid dates
+utilitario.options.timestamps_as_date = true;
 
-    // cast.array should treat string as a possible array?
-    // fill the split character if you think so...
-    cast_string_to_array_split: false,
+// throw or return null ?
+utilitario.options.throw_invalid_casts = false;
 
-    // be extra caution with this, zero could be invalid in your app an also NaN
-    cast_nan_to_zero: true
-};
+// cast.array should treat string as a possible array?
+// fill the split character if you think so...
+utilitario.options.cast_string_to_array_split = false;
+
+// be extra caution with this, zero could be invalid in your app an also NaN
+utilitario.options.cast_nan_to_zero = true;
+
 
 // collection of functions ordered
 utilitario.is =          { /* Functions to identify input */},
@@ -271,7 +271,7 @@ var schema = {
 There is two additions to constraints: nullable and optional. Both are considered as final constrains once they are true, nothing more is tested.
 
 
-**Schema Trunk (array/object, those that are recursive)**
+**Schema Trunk (array/object, recursive)**
 
 **array**
 ```js
@@ -344,13 +344,43 @@ t.deepEqual(errors, {int: [["is undefined"]]}, "notice that int was undefined");
 
 ```
 
+### Report error to users
+
+The combo messages (in the schema) and errors returned by schema validation can be used to write meaningful messages like in this example:
+
+```js
+
+var sprintf_js = require("sprintf-js"),
+    i,
+    errors = [],
+    raw_errors = {},
+    path;
+
+// message:
+// 'Minimum of %(arguments[0])s characters',
+
+// validate
+// utilitario.schema('', '', raw_errors)
+
+for (path in raw_errors) {
+    for (i = 0; i < raw_errors[path].length; ++i) {
+        message = raw_errors[path][i].shift();
+        console.log(sprintf_js.sprintf(message, {
+            arguments: raw_errors[path][i]
+            // you can add more info here, path/stack/user
+        }));
+    }
+}
+
+```
+
 ## Dependencies
 
 [node-querystring](https://github.com/visionmedia/node-querystring)
 
-[object-enhancements](https://github.com/llafuente/object-enhancements)
+[is-html](https://github.com/sindresorhus/is-html)
 
-[array-enhancements](https://github.com/llafuente/array-enhancements)
+[lodash.clonedeep](https://www.npmjs.org/package/lodash.clonedeep)
 
 
 *Developement*
@@ -363,7 +393,7 @@ t.deepEqual(errors, {int: [["is undefined"]]}, "notice that int was undefined");
 ## Performance
 
 * typeof is called many times, but it should be fast enough.
-* has many internal calls to avoid code duplication, in the future those call could be inlined.
+* has many internal calls to avoid code duplication, in the future those call could be inlined see [funlinify](https://github.com/llafuente/funlinify)
 * is.json use JSON.parse, use it with caution, maybe it's better to parse directly.
 
 ## Install
@@ -438,7 +468,8 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
      toCamelCase: [Function],
      camelToDash: [Function],
      toUnderscore: [Function],
-     trim: [Function] },
+     trim: [Function],
+     removeDiacritics: [Function] },
   constraints:
    { keys: [Function],
      in: [Function],
@@ -460,6 +491,8 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
      numeric: [Function],
      hexadecimal: [Function],
      hexColor: [Function],
+     minLength: [Function],
+     maxLength: [Function],
      length: [Function],
      UUIDv3: [Function],
      UUIDv4: [Function],
@@ -468,7 +501,23 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
      max: [Function],
      ip: [Function],
      ip4: [Function],
-     ip6: [Function] },
+     ip6: [Function],
+     buffer: [Function],
+     containUppercase: [Function],
+     containLowercase: [Function],
+     constainNumber: [Function],
+     constainLetter: [Function],
+     noSpaces: [Function],
+     maxDecimals: [Function] },
+  truncate:
+   { maxLength: [Function],
+     min: [Function],
+     max: [Function],
+     dateAfter: [Function],
+     dateBefore: [Function],
+     alphanumeric: [Function],
+     alpha: [Function],
+     hexadecimal: [Function] },
   cast:
    { integer: [Function],
      float: [Function],
@@ -477,10 +526,13 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
      regex: [Function],
      object: [Function],
      array: [Function],
-     binary: [Function] },
+     boolean: [Function],
+     binary: [Function],
+     number: [Function] },
   validate: [Function: __validate],
   schema: [Function: __schema],
   sanitize: [Function: __sanitize] }
+
 >
 
 ```
