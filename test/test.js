@@ -38,7 +38,7 @@ process.exit();
                 oks: ["numberStrict", "decimal", "integer", "notNull", "notEmpty", "date"]
             }, {
                 value: "100",
-                oks: ["decimal", "integer", "notNull", "notEmpty", "string", "date", "json"]
+                oks: ["decimal", "integer", "notNull", "notEmpty", "string", "date", "jsonStrict"]
             }, {
                 value: "",
                 oks: ["null", "empty", "string"]
@@ -71,7 +71,7 @@ process.exit();
                 oks: ["integer", "number", "numberStrict", "decimal", "notNull", "notEmpty", "infinite"]
             }, {
                 value: "{\"json_test\":true}",
-                oks: ["string", "notNull", "notEmpty", "json"]
+                oks: ["string", "notNull", "notEmpty", "json", "jsonStrict"]
             }
         ];
 
