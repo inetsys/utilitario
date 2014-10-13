@@ -83,6 +83,13 @@ utilitario.sanitize();
 * `array` (Mixed val)
 * `date` (Mixed val)
 * `json` (Mixed val)
+
+  Check for Object/Array begin/end string. Made for fast test, should be enough for most of the uses, considered that you will need to use JSON.parse eventually
+
+* `jsonStrict` (val)
+
+  use JSON.parse... it's slow. Consider use is.json
+
 * `boolean` (Mixed val)
 
 
@@ -394,7 +401,6 @@ for (path in raw_errors) {
 
 * typeof is called many times, but it should be fast enough.
 * has many internal calls to avoid code duplication, in the future those call could be inlined see [funlinify](https://github.com/llafuente/funlinify)
-* is.json use JSON.parse, use it with caution, maybe it's better to parse directly.
 
 ## Install
 
