@@ -327,7 +327,13 @@ process.exit();
 
         t.equal(constraints.length("", 1, 10), false, "length");
         t.equal(constraints.length("abc", 1, 10), true, "length");
+        t.equal(constraints.length("abc", 1), false, "length");
+        t.equal(constraints.length("abc", 3), true, "length");
+        t.equal(constraints.length("abc", 2), false, "length");
         t.equal(constraints.length("abasd4sa5dfdsfs6a516dsc", 1, 10), false, "length");
+
+        t.equal(constraints.length(["abc"], 1), true, "length");
+        t.equal(constraints.length(["abc"], 0), false, "length");
 
         t.equal(constraints.length([], 1, 10), false, "length");
         t.equal(constraints.length(["x"], 1, 10), true, "length");
