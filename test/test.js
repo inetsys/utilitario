@@ -11,7 +11,6 @@
 
         table;
 
-
         //console.log("util instance", util.inspect(instance, {depth: 5, colors: true}));
 /*
 console.log(utilitario.is.null(NaN));
@@ -640,7 +639,47 @@ process.exit();
 
     });
 
+    test("removeDiacritics", function(t) {
+        // tap test
 
+        var object_schema = {
+            "cast": "object",
+            "object": {
+                "nuevo_formulario": {
+                    "cast": "object",
+                    "constraints": {
+                        "optional": true
+                    },
+                    "object": {
+                        "num": {
+                            "cast": "number",
+                            "constraints": {
+                                "min": [0],
+                                "max": [5],
+                                "optional": false
+                            },
+                            "messages": {
+                                "min": "constraint-min-fail",
+                                "max": "constraint-max-fail",
+                                "optional": "constraint-optional-fail"
+                            }
+                        }
+                    }
+                }
+            }
+        };
 
+        var errors = {};
+        utilitario.schema({nuevo_formulario: {}}, object_schema, errors);
+        console.log(errors);
+        t.equal(Object.keys(errors).length, 1, "if object is defined, undefined is not allowed");
+
+        errors = {};
+        utilitario.schema({}, object_schema, errors);
+        t.equal(Object.keys(errors).length, 0, "if object not defined, undefined is allowed");
+
+        t.end();
+
+    });
 
 }());
