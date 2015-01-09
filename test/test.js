@@ -639,7 +639,7 @@ process.exit();
 
     });
 
-    test("removeDiacritics", function(t) {
+    test("optional fix tests", function(t) {
         // tap test
 
         var object_schema = {
@@ -681,5 +681,34 @@ process.exit();
         t.end();
 
     });
+
+    test("futureDate", function(t) {
+        var d = new Date();
+        t.equal(utilitario.constraints.futureDate(d), false, "today is not future!");
+
+        d.setTime(d.getTime() + 24 * 60 * 60 * 1000); // tomorrow
+        t.equal(utilitario.constraints.futureDate(d), true, "tomorrow is future!");
+
+        d = new Date();
+        d.setTime(d.getTime() - 24 * 60 * 60 * 1000); // yesterday
+        t.equal(utilitario.constraints.futureDate(d), false, "yesterday is not future!");
+
+        t.end();
+    });
+
+    test("pastDate", function(t) {
+        var d = new Date();
+        t.equal(utilitario.constraints.pastDate(d), false, "today is not past!");
+
+        d.setTime(d.getTime() + 24 * 60 * 60 * 1000); // tomorrow
+        t.equal(utilitario.constraints.pastDate(d), false, "tomorrow is not past!");
+
+        d = new Date();
+        d.setTime(d.getTime() - 24 * 60 * 60 * 1000); // yesterday
+        t.equal(utilitario.constraints.pastDate(d), true, "yesterday is past!");
+
+        t.end();
+    });
+
 
 }());
