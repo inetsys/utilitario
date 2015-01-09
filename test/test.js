@@ -710,5 +710,21 @@ process.exit();
         t.end();
     });
 
+    test("tillToday", function(t) {
+        var d = new Date();
+        t.equal(utilitario.constraints.tillToday(d), true, "today is ok!");
+
+        d.setTime(d.getTime() + 24 * 60 * 60 * 1000); // tomorrow
+        t.equal(utilitario.constraints.tillToday(d), false, "tomorrow is ko!");
+
+        d = new Date();
+        d.setTime(d.getTime() - 24 * 60 * 60 * 1000); // yesterday
+        t.equal(utilitario.constraints.tillToday(d), true, "yesterday is ok!");
+
+        t.end();
+    });
+
+
+
 
 }());
