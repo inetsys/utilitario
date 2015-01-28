@@ -447,7 +447,7 @@ process.exit();
 
 
         t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
-        t.deepEqual(errors, {z: [["is undefined"]]}, "errors");
+        t.deepEqual(errors, {z: [["constraint-is-undefined"]]}, "errors");
 
         t.end();
     });
@@ -485,7 +485,7 @@ process.exit();
 
 
         t.deepEqual(ret, {x:100, y: "fdnsjx9", z:undefined}, "is 100 number");
-        t.deepEqual(errors, {"entity": [["missing some keys", ["x", "y", "z"]]], "entity.z": [["is undefined"]]}, "errors");
+        t.deepEqual(errors, {"entity": [["missing some keys", ["x", "y", "z"]]], "entity.z": [["constraint-is-undefined"]]}, "errors");
 
         t.end();
     });
@@ -581,7 +581,7 @@ process.exit();
 
         errors = {};
         t.deepEqual(utilitario.schema({string: "abc"}, object_schema, errors), {int: undefined, string: "abc"}, "ok!");
-        t.deepEqual(errors, {int: [["is undefined"]]}, "notice that int was undefined");
+        t.deepEqual(errors, {int: [["constraint-is-undefined"]]}, "notice that int was undefined");
 
 
         t.end();
@@ -723,6 +723,22 @@ process.exit();
 
         t.end();
     });
+
+    test("nullable=false", function(t) {
+
+      var errors = {};
+      var object_schema = {
+        constraints: {
+          "nullable": false
+        }
+      };
+      t.deepEqual(utilitario.schema(null, object_schema, errors), null, "ok!");
+      t.deepEqual(errors, {"": [["constraint-is-null"]]}, "notice that int was undefined");
+
+
+      t.end();
+
+    })
 
 
 
