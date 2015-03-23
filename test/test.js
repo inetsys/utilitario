@@ -738,8 +738,32 @@ process.exit();
 
       t.end();
 
-    })
+    });
 
+    test("cast-boolean", function(t) {
+
+      var errors = {};
+      var object_schema = {
+        constraints: {
+          "nullable": false
+        }
+      };
+      t.deepEqual(utilitario.cast.boolean("true"), true, "ok!");
+      t.deepEqual(utilitario.cast.boolean("false"), false, "ok!");
+
+      t.deepEqual(utilitario.cast.boolean(true), true, "ok!");
+      t.deepEqual(utilitario.cast.boolean(false), false, "ok!");
+
+      t.deepEqual(utilitario.cast.boolean({}), true, "ok!");
+      t.deepEqual(utilitario.cast.boolean([]), true, "ok!");
+
+      t.deepEqual(utilitario.cast.boolean(null), false, "ok!");
+      t.deepEqual(utilitario.cast.boolean(undefined), false, "ok!");
+
+
+      t.end();
+
+    })
 
 
 
