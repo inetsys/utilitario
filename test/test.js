@@ -763,7 +763,24 @@ process.exit();
 
       t.end();
 
-    })
+    });
+
+    test("empty string constraints check", function(t) {
+      var constraints = utilitario.constraints;
+
+      t.equal(constraints.email(""), true, "empty email is ok");
+      t.equal(constraints.url(""), true, "empty url is ok");
+      t.equal(constraints.alpha(""), true, "empty alpha is ok");
+      t.equal(constraints.ip(""), true, "empty ip is ok");
+      t.equal(constraints.alphanumeric(""), true, "empty alphanumeric is ok");
+      t.equal(constraints.hexadecimal(""), true, "empty hexadecimal is ok");
+      t.equal(constraints.hexColor(""), true, "empty hexColor is ok");
+      t.equal(constraints.UUIDv3(""), true, "empty UUIDv3 is ok");
+      t.equal(constraints.UUIDv4(""), true, "empty UUIDv4 is ok");
+      t.equal(constraints.UUIDv5(""), true, "empty UUIDv5 is ok");
+      
+      t.end();
+    });
 
 
 
