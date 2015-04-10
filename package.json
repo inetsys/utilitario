@@ -1,6 +1,6 @@
 {
   "name": "utilitario",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Bulletproof identification (is), validation (constraints) and casting (cast)",
   "main": "./index.js",
   "keywords": [],
