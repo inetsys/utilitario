@@ -714,12 +714,26 @@ process.exit();
         var d = new Date();
         t.equal(utilitario.constraints.tillToday(d), true, "today is ok!");
 
-        d.setTime(d.getTime() + 24 * 60 * 60 * 1000); // tomorrow
+        d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000); // tomorrow
         t.equal(utilitario.constraints.tillToday(d), false, "tomorrow is ko!");
 
         d = new Date();
         d.setTime(d.getTime() - 24 * 60 * 60 * 1000); // yesterday
         t.equal(utilitario.constraints.tillToday(d), true, "yesterday is ok!");
+
+        t.end();
+    });
+
+    test("fromToday", function(t) {
+        var d = new Date();
+        t.equal(utilitario.constraints.fromToday(d), true, "today is ok!");
+
+        d.setTime(d.getTime() + 24 * 60 * 60 * 1000); // tomorrow
+        t.equal(utilitario.constraints.fromToday(d), true, "tomorrow is ok!");
+
+        d = new Date();
+        d.setTime(d.getTime() - 2 * 24 * 60 * 60 * 1000); // yesterday
+        t.equal(utilitario.constraints.fromToday(d), false, "yesterday is ko!");
 
         t.end();
     });
@@ -778,7 +792,7 @@ process.exit();
       t.equal(constraints.UUIDv3(""), true, "empty UUIDv3 is ok");
       t.equal(constraints.UUIDv4(""), true, "empty UUIDv4 is ok");
       t.equal(constraints.UUIDv5(""), true, "empty UUIDv5 is ok");
-      
+
       t.end();
     });
 
