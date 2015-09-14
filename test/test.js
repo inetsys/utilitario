@@ -796,6 +796,48 @@ process.exit();
       t.end();
     });
 
+    test("schema filter.options", function(t) {
+      var errors = {},
+        ret = utilitario.schema({
+          nuevo_formulario: {abc: null}
+        }, {
+            "cast": "object",
+            "object": {
+                "nuevo_formulario": {
+                    "cast": "object",
+                    "constraints": {
+                        "optional": true
+                    },
+                    "object": {
+                        "abc": {
+                            "cast": "number",
+                            "default": 500, // default won't be set
+                            "constraints": {
+                                "required": true,
+                                "nullable": false
+                            },
+                            "messages": {
+                                "optional": "constraint-optional-fail",
+                                "nullable": "constraint-nullable-fail"
+                            }
+                        }
+                    }
+                }
+            }
+        }, errors, {
+          filter: function(path, data) {
+            if (path == "nuevo_formulario.abc") {
+              return false;
+            }
+            return true;
+          }
+        });
+
+        t.deepEqual(ret, { nuevo_formulario: { abc: null } }, "ret match");
+        t.deepEqual(errors, { }, "no errors");
+
+        t.end();
+      });
 
 
 }());

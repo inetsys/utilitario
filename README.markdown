@@ -5,14 +5,14 @@
 
 ## Introduction
 
-Bulletproof identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*) and truncate (*truncate*) for Javascript types.
+Bulletproof type identification (*is*), validation (*constraints*), casting (*cast*), parse (*parse*) and sanitize/transformation (*transform*) and truncate (*truncate*) for Javascript types.
 
-Why? Because **You shouldn't trust user/developers input. Users are evil and developers are event worst (they wont read the docs jump to your outdated examples and issue you)**
+Why? Because **You shouldn't trust users/developers input. Users are evil and developers are even worst (they wont read the docs jump to your outdated examples and issue you)**
 
 
 ## Utilitario objectives
 
-* Support any input anywhere: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite(s), NaN(s), Function(s) even Native function(s), anything and it will not crash!
+* Support any input anywhere: RegExp(s), Object(s), Array(s), Number(s), String(s), Date(s), Infinite, NaN, Function(s) even Native function(s), anything and it will not crash!
 * Identify every Javascript primitive strictly and lossy.
 * Validate any input, giving multiple-meaningful errors, not just true/false. Something to debug properly.
 * Cast anything into something, and obvious but null means "*cannot be casted*".
@@ -26,9 +26,7 @@ Why? Because **You shouldn't trust user/developers input. Users are evil and dev
 
 var utilitario = require("utilitario");
 
-utilitario.options.xxx = true; /*set option*/
-
-// options:
+// configure if needed
 
 // allow NaN to be returned while casting ?
 utilitario.options.allow_nan = false;
@@ -47,7 +45,7 @@ utilitario.options.cast_string_to_array_split = false;
 utilitario.options.cast_nan_to_zero = true;
 
 
-// collection of functions ordered
+// collection of functions
 utilitario.is =          { /* Functions to identify input */},
 utilitario.parse =       { /* parse your input from a given representation like json-string */ },
 utilitario.transform =   { /* transform/sanitize your inputs*/ },
@@ -128,6 +126,10 @@ If you want exceptions on invalid castings setup utilitario with:
 * `notEqualsStrict` (a, b)
 * `regex` (str, pattern, modifiers)
 * `notRegex` (str, pattern, modifiers)
+* `tillToday` (str, date)
+* `fromToday` (str, date)
+* `pastDate` (str, date)
+* `futureDate` (str, date)
 * `dateAfter` (str, date)
 * `dateBefore` (str, date)
 * `email` (str)
@@ -230,9 +232,9 @@ t.deepEqual(errors, {}, "no errors");
 
 ```
 
-Structure object
+### Structure object
 
-**Schema Leaf (anything not array/object)**
+#### Schema Leaf (anything not array/object)
 
 ```js
 var schema = {
@@ -278,9 +280,10 @@ var schema = {
 There is two additions to constraints: nullable and optional. Both are considered as final constrains once they are true, nothing more is tested.
 
 
-**Schema Trunk (array/object, recursive)**
+#### Schema Trunk (array/object, recursive)
 
-**array**
+**Arrays**
+
 ```js
 {
     cast: "array", // mandatory
@@ -312,7 +315,8 @@ t.deepEqual(utilitario.schema(["abc"], array_schema, errors), [0], "");
 t.deepEqual(errors, {"list.0": [["some elements in the array are not integers"], true]}, "with errors");
 ```
 
-**object**
+**Objects**
+
 ```js
 {
     cast: "object", // mandatory
@@ -351,7 +355,7 @@ t.deepEqual(errors, {int: [["is undefined"]]}, "notice that int was undefined");
 
 ```
 
-### Report error to users
+### errors object
 
 The combo messages (in the schema) and errors returned by schema validation can be used to write meaningful messages like in this example:
 
@@ -380,6 +384,15 @@ for (path in raw_errors) {
 }
 
 ```
+
+### options
+
+* `filter` callback(String path, Mixed value): Boolean
+
+Filter is used to ignore some data, that you want to ignore validation.
+If you return false, the returned value be the given, and no cast will be performed.
+Just ignored and continue.
+
 
 ## Dependencies
 
@@ -428,9 +441,6 @@ node test-class.js
 ## REPL
 
 ```js
-
-luis@luis-dev:~/noboxout/node-expressionist$ node
-> require("utilitario")
 { options:
    { allow_nan: false,
      timestamps_as_date: true,
@@ -456,6 +466,7 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
      array: [Function],
      date: [Function],
      json: [Function],
+     jsonStrict: [Function],
      boolean: [Function] },
   parse:
    { string: [Function],
@@ -488,6 +499,10 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
      notEqualsStrict: [Function],
      regex: [Function],
      notRegex: [Function],
+     tillToday: [Function],
+     fromToday: [Function],
+     pastDate: [Function],
+     futureDate: [Function],
      dateAfter: [Function],
      dateBefore: [Function],
      email: [Function],
@@ -538,9 +553,6 @@ luis@luis-dev:~/noboxout/node-expressionist$ node
   validate: [Function: __validate],
   schema: [Function: __schema],
   sanitize: [Function: __sanitize] }
-
->
-
 ```
 
 
