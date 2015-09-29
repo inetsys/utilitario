@@ -393,6 +393,12 @@ Filter is used to ignore some data, that you want to ignore validation.
 If you return false, the returned value be the given, and no cast will be performed.
 Just ignored and continue.
 
+* `create_properties` Boolean
+
+Create object properties if they are not defined, set the value to default or `undefined`.
+Note: This could lead to some validation errors: `default: null -- constraints: {nullable: false}`
+
+This can create an empty/default object structure from an empty object.
 
 ## Dependencies
 

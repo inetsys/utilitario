@@ -813,7 +813,6 @@ process.exit();
                             "cast": "number",
                             "default": 500, // default won't be set
                             "constraints": {
-                                "required": true,
                                 "nullable": false
                             },
                             "messages": {
@@ -838,6 +837,42 @@ process.exit();
 
         t.end();
       });
+
+      test("create_properties", function(t) {
+        var errors = {},
+          ret = utilitario.schema({
+          }, {
+              "cast": "object",
+              "object": {
+                  "nuevo_formulario": {
+                      "cast": "object",
+                      "constraints": {
+                          "optional": true
+                      },
+                      "object": {
+                          "abc": {
+                              "cast": "number",
+                              "default": 500, // default won't be set
+                              "constraints": {
+                                  "nullable": false
+                              },
+                              "messages": {
+                                  "optional": "constraint-optional-fail",
+                                  "nullable": "constraint-nullable-fail"
+                              }
+                          }
+                      }
+                  }
+              }
+          }, errors, {
+            create_properties: true
+          });
+
+          t.deepEqual(errors, { }, "no errors");
+          t.deepEqual(ret, { nuevo_formulario: { abc: 500 } }, "ret match");
+
+          t.end();
+        });
 
 
 }());
