@@ -839,37 +839,61 @@ process.exit();
       });
 
       test("create_properties", function(t) {
+        var schema = {
+            "cast": "object",
+            "object": {
+                "nuevo_formulario": {
+                    "cast": "object",
+                    "constraints": {
+                        "optional": true
+                    },
+                    "object": {
+                        "abc": {
+                            "cast": "number",
+                            "default": 500, // default won't be set
+                            "constraints": {
+                                "nullable": false
+                            },
+                            "messages": {
+                                "optional": "constraint-optional-fail",
+                                "nullable": "constraint-nullable-fail"
+                            }
+                        },
+                        "xyz": {
+                            "cast": "number",
+                            "default": 100, // default won't be set
+                            "constraints": {
+                                "nullable": false
+                            },
+                            "messages": {
+                                "optional": "constraint-optional-fail",
+                                "nullable": "constraint-nullable-fail"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
         var errors = {},
           ret = utilitario.schema({
-          }, {
-              "cast": "object",
-              "object": {
-                  "nuevo_formulario": {
-                      "cast": "object",
-                      "constraints": {
-                          "optional": true
-                      },
-                      "object": {
-                          "abc": {
-                              "cast": "number",
-                              "default": 500, // default won't be set
-                              "constraints": {
-                                  "nullable": false
-                              },
-                              "messages": {
-                                  "optional": "constraint-optional-fail",
-                                  "nullable": "constraint-nullable-fail"
-                              }
-                          }
-                      }
-                  }
-              }
-          }, errors, {
+          }, schema, errors, {
             create_properties: true
           });
 
           t.deepEqual(errors, { }, "no errors");
-          t.deepEqual(ret, { nuevo_formulario: { abc: 500 } }, "ret match");
+          t.deepEqual(ret, { nuevo_formulario: { abc: 500, xyz: 100 } }, "ret match");
+
+          ret = utilitario.schema({
+            nuevo_formulario: {
+              xyz: 99
+            }
+          }, schema, errors, {
+            create_properties: true
+          });
+
+          t.deepEqual(errors, { }, "no errors");
+          t.deepEqual(ret, { nuevo_formulario: { abc: 500, xyz: 99 } }, "ret match");
 
           t.end();
         });
