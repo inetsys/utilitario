@@ -413,8 +413,6 @@ This can create an empty/default object structure from an empty object.
 
 [tap](https://github.com/isaacs/node-tap) (tests)
 
-[ass](https://github.com/lloyd/ass) (code-coverage)
-
 
 ## Performance
 

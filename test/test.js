@@ -690,6 +690,10 @@ process.exit();
         t.equal(utilitario.constraints.futureDate(d), true, "tomorrow is future!");
 
         d = new Date();
+        d.setTime(d.getTime() + 12 * 60 * 60 * 1000); // half-day
+        t.equal(utilitario.constraints.futureDate(d), false, "today 12:00 is not future!");
+
+        d = new Date();
         d.setTime(d.getTime() - 24 * 60 * 60 * 1000); // yesterday
         t.equal(utilitario.constraints.futureDate(d), false, "yesterday is not future!");
 
