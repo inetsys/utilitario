@@ -30,8 +30,8 @@
     "lodash.clonedeep": "^2.4.1"
   },
   "devDependencies": {
-    "tap": "~5.8.0",
-    "cli-table": "*"
+    "cli-table": "^0.3.1",
+    "tap": "^8.0.1"
   },
   "jshintConfig": {
     "white": true,
